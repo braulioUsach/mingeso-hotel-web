@@ -45,7 +45,12 @@
             <!-- Carrera a la que postula -->
             <div class="form-group">
               <label for="Course">Carrera a la que postula</label>
-              <select class="form-control" name="Course" id="Course" v-model="form.Course">
+              <select
+                class="form-control"
+                name="Course"
+                id="Course"
+                v-model="form.Course"
+              >
                 <option
                   v-for="(item, index) in Courses"
                   v-bind:key="index"
