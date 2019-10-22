@@ -19,7 +19,7 @@ node {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        app = docker.build("braulioUsach/mingeso-hotel-web")
+        app = docker.build("brauliousach/mingeso-hotel-web")
     }
 
     stage('Test image') {
