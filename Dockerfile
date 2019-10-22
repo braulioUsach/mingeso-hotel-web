@@ -13,13 +13,13 @@ RUN rm -rf /tmp/* /var/cache/apk/*
 # Install app dependencies
 COPY . /app
 COPY .env.example ./.env
-RUN npm install
+RUN yarn install
 
 # Run test build
 #RUN npm test
 
 # Generate build
-RUN npm run build
+RUN yarn build
 
 ############
 ### Prod ###
