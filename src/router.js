@@ -10,32 +10,17 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      // component: Home
       component: () => import("./views/postulant/Index.vue")
     },
     {
-      path: "/postulant",
-      name: "index-postulant",
-      component: () => import("./views/postulant/Index.vue")
-    },
-    {
-      path: "/postulant/create",
-      name: "create-postulant",
-      component: () => import("./views/postulant/Edit.vue")
-    },
-    {
-      path: "/client/create",
+      path: "/clients/create",
       name: "create-client",
       component: () => import("./views/client/Create.vue")
     },
     {
-      path: "/about",
-      name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "./views/About.vue")
-    }
+      path: "/booking/create",
+      name: "create-booking",
+      component: () => import("./views/booking/Create.vue")
+    },
   ]
 });

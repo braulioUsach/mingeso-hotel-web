@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div id="nav" class="nav-bar mb-3">
-      <router-link to="/client/create">Crear Cliente</router-link>
+      <router-link to="/clients/create">Crear Cliente</router-link>
+      <span> | </span>
+      <router-link to="/booking/create">Crear Reserva</router-link>
     </div>
     <router-view />
   </div>

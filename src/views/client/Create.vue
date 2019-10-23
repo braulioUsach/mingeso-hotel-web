@@ -75,6 +75,10 @@ export default {
     this.getCountries();
   },
   methods: {
+    persist() {
+      localStorage.dni = this.form.dni;
+      localStorage.firstName = this.form.firstName;
+    },
     getCountries() {
       axios
         .get(`${process.env.VUE_APP_API_URL}/countries`)
@@ -85,7 +89,6 @@ export default {
               label: country.name
             }
           });
-          console.log("Countries loaded");
         })
         .catch(error => {
           this.countries = [{
@@ -104,8 +107,9 @@ export default {
           email: this.form.email
         })
         .then(() => {
-          console.log("Cliente creado");
-          this.$router.go("/");
+          this.persist();
+          this.$router.push({ name: 'create-booking'});
+          // this.$router.go("/booking/create");
         })
         .catch(error => {
           console.log("error", error);
