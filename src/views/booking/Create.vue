@@ -4,9 +4,13 @@
     <div class="row">
       <div class="col-12">
         <div v-for="(reservation,n) in reservations">
-          <p>
-            <span class="cat">{{reservation}}</span> <button @click="removeReservation(n)">Eliminar</button>
-          </p>
+          <div class="row">
+            <div class="col-2">{{reservation.dni}}</div>
+            <div class="col-2">{{reservation.room}}</div>
+            <div class="col-2">{{reservation.room}}</div>
+            <div class="col-3">{{reservation.checkin}}</div>
+            <div class="col-3">{{reservation.checkout}}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -31,14 +35,14 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="rut">Ingreso</label>
-                <input type="text" class="form-control" id="checkin" placeholder="YY-MM-DD" v-model="formReservation.checkin" required />
+                <input type="text" class="form-control" id="checkin" placeholder="YYYY-MM-DD" v-model="formReservation.checkin" required />
               </div>
             </div>
 
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="rut">Salida</label>
-                <input type="text" class="form-control" id="checkout" placeholder="YY-MM-DD" v-model="formReservation.checkout" required />
+                <input type="text" class="form-control" id="checkout" placeholder="YYYY-MM-DD" v-model="formReservation.checkout" required />
               </div>
             </div>
           </div>
@@ -54,8 +58,8 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="room">Habitación</label>
-                <select class="form-control" name="room" id="room" v-model="formReservation.room" required>
-                  <option v-for="(item, index) in rooms" v-bind:key="index" :value="code">{{ item.code }}</option>
+                <select class="form-control" name="room" id="room" v-model="formReservation.room" required :disabled="!this.roomsLoaded">
+                  <option v-for="(item, index) in rooms" v-bind:key="index" :value="item.code">{{ item.code }}</option>
                 </select>
               </div>
             </div>
@@ -84,6 +88,7 @@ export default {
       newReservation: '',
       roomsType: [],
       rooms: [],
+      roomsLoaded: false,
       formReservation: {
         bookingCode: '',
         dni: '',
@@ -122,7 +127,8 @@ export default {
           this.bookingCode = bookingCode;
         })
         .catch(error => {
-          console.log("error", error);
+          console.log("no se pudo crear reserva");
+          console.error(error);
         });
     },
     readRoomsType() {
@@ -132,12 +138,18 @@ export default {
       ]
     },
     readRooms() {
+      this.roomsLoaded = false;
       axios
         .post(`${process.env.VUE_APP_API_URL}/room/listByType`, {
           type: this.formReservation.roomType
         })
         .then(response => {
-          this.rooms = response.data;
+          this.rooms = response.data.map((room) => {
+            return {
+              code: room.code
+            }
+          });
+          this.roomsLoaded = true;
         })
         .catch(error => {
           console.log("no se pudo cargar las habitaciones");
@@ -160,12 +172,7 @@ export default {
       };
       this.saveReservations();
     },
-    removeReservation(x) {
-      this.cats.splice(x, 1);
-      this.saveReservations();
-    },
     saveReservations() {
-      // let parsed = JSON.stringify(this.reservations);
       let parsed = JSON.stringify(this.formReservation);
       localStorage.setItem('reservations', parsed);
     },
@@ -181,17 +188,14 @@ export default {
         })
         .then((response) => {
           this.persist();
-          console.log('response');
-          console.log(response.data)
           const isValidResponse = response.data
-          if(isValidResponse) {
+          if (isValidResponse) {
             this.addReservation();
           }
-          // this.$router.push({ name: 'create-booking'});
-          // this.$router.go("/booking/create");
         })
         .catch(error => {
-          console.log("error", error);
+          console.log("no se pudo agregar habitación");
+          console.error(error);
         });
     }
   }
