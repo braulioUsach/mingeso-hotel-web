@@ -31,6 +31,7 @@
               </div>
             </div>
           </div>
+          <!--
           <div class="row">
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
@@ -46,6 +47,7 @@
               </div>
             </div>
           </div>
+        -->
           <div class="row">
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
@@ -65,8 +67,16 @@
             </div>
           </div>
           <div class="row">
+            <div class="col-12">
+              <v-range-selector
+                :start-date.sync="formReservation.checkin"
+                :end-date.sync="formReservation.checkout"
+              />
+            </div>
+          </div>
+          <div class="row mt-4 float-right">
             <div class="form-group">
-              <button class="btn btn-primary">Crear</button>
+              <button class="btn btn-primary">Agregar Habitación</button>
             </div>
           </div>
         </form>
@@ -78,7 +88,13 @@
 
 <script>
 import axios from "axios";
+import VDaySelector from 'vuelendar/components/vl-day-selector';
+import VRangeSelector from 'vuelendar/components/vl-range-selector';
 export default {
+  components: {
+    VDaySelector,
+    VRangeSelector
+  },
   data() {
     return {
       bookingCode: '',
@@ -201,3 +217,4 @@ export default {
   }
 };
 </script>
+<style src="vuelendar/scss/vuelendar.scss" lang="scss"></style>
