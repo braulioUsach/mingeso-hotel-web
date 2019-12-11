@@ -10,7 +10,7 @@ export default new Router({
     {
       path: "/",
       name: "home",
-      component: () => import("./views/postulant/Index.vue")
+      component: () => import("./views/booking/List.vue")
     },
     {
       path: "/clients/create",
@@ -21,6 +21,6 @@ export default new Router({
       path: "/booking/create",
       name: "create-booking",
       component: () => import("./views/booking/Create.vue")
-    },
+    }
   ]
 });

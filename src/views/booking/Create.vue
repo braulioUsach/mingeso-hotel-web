@@ -1,4 +1,4 @@
- git  <template>
+<template>
 <div class="client">
   <div class="container">
     <div class="row">
@@ -68,13 +68,9 @@
           </div>
           <div class="row mt-3">
             <div class="col-12">
+              <div><label for="room">Periodo de reserva</label></div>
               <div class="form-group">
-                <label for="room">Periodo de reserva</label>
-                <v-range-selector
-                  :start-date.sync="formReservation.checkin"
-                  :end-date.sync="formReservation.checkout"
-                  :is-disabled="date => this.reservedaDays.includes(date)"
-                />
+                <v-range-selector :start-date.sync="formReservation.checkin" :end-date.sync="formReservation.checkout" :is-disabled="date => this.reservedDays.includes(date)" />
               </div>
             </div>
           </div>
@@ -109,7 +105,7 @@ export default {
       roomsType: [],
       rooms: [],
       roomsLoaded: false,
-      reservedaDays: [],
+      reservedDays: [],
       formReservation: {
         bookingCode: '',
         dni: '',
@@ -189,66 +185,25 @@ export default {
         room: ''
       };
       this.saveReservations();
+      // {"type":"none","start":"2019-12-19","end":"2019-12-31","room":"108","code":"RS190045","dni":"28092637-K"}
     },
     saveReservations() {
       let parsed = JSON.stringify(this.formReservation);
       localStorage.setItem('reservations', parsed);
     },
     loadReservedDays() {
-      this.reservedaDays = [];
-      const dummy = [{
-          "bookingcode": "RS190001",
-          "starDate": "2019-01-10T00:00:00.000+0000",
-          "endDate": "2019-05-12T00:00:00.000+0000",
-          "firstName": "Daniel",
-          "lastName": "Alvarez",
-          "codeRoom": "205",
-          "floor": 2
-        },
-        {
-          "bookingcode": "RS190001",
-          "starDate": "2019-05-13T00:00:00.000+0000",
-          "endDate": "2019-05-14T00:00:00.000+0000",
-          "firstName": "Daniel",
-          "lastName": "Alvarez",
-          "codeRoom": "205",
-          "floor": 2
-        },
-        {
-          "bookingcode": "RS190003",
-          "starDate": "2019-10-10T00:00:00.000+0000",
-          "endDate": "2019-10-12T00:00:00.000+0000",
-          "firstName": "Test",
-          "lastName": "Braulio",
-          "codeRoom": "205",
-          "floor": 2
-        },
-        {
-          "bookingcode": "RS190003",
-          "starDate": "2019-10-10T00:00:00.000+0000",
-          "endDate": "2019-10-13T00:00:00.000+0000",
-          "firstName": "Test",
-          "lastName": "Braulio",
-          "codeRoom": "209",
-          "floor": 2
-        },
-        {
-          "bookingcode": "RS190003",
-          "starDate": "2019-10-10T00:00:00.000+0000",
-          "endDate": "2019-10-15T00:00:00.000+0000",
-          "firstName": "Test",
-          "lastName": "Braulio",
-          "codeRoom": "207",
-          "floor": 2
-        }
-      ];
-      dummy.filter((reservation) => {
-        console.log(`${reservation.codeRoom} || ${this.formReservation.room}`);
-        if (reservation.codeRoom === this.formReservation.room) {
-          console.log(reservation.starDate.substring(0, 10));
-          this.reservedaDays.push(reservation.starDate.substring(0, 10));
-        }
-      })
+      this.reservedDays = [];
+      axios.get(`${process.env.VUE_APP_API_URL}/reservation_list`)
+        .then(response => {
+          response.data.filter((reservation) => {
+            if (reservation.codeRoom === this.formReservation.room) {
+              this.reservedDays.push(reservation.starDate.substring(0, 10));
+            }
+          })
+        })
+        .catch(err => {
+          console.error(err);
+        })
     },
     onSubmit() {
       axios
@@ -263,6 +218,7 @@ export default {
         .then((response) => {
           this.persist();
           const isValidResponse = response.data
+
           if (isValidResponse) {
             this.addReservation();
           }
@@ -275,4 +231,4 @@ export default {
   }
 };
 </script>
-<style src="vuelendar/scss/vuelendar.scss" lang="scss"></style>
+<style src="vuelendar/scss/vuelendar.scss" lang="scss" />
