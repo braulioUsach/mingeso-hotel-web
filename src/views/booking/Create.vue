@@ -3,11 +3,18 @@
   <div class="container">
     <div class="row">
       <div class="col-12">
+        <div v-if="reservations.length > 0">
+          <div class="row">
+            <div class="col-3">DNI</div>
+            <div class="col-3">Habitación</div>
+            <div class="col-3">Llegada</div>
+            <div class="col-3">Salida</div>
+          </div>
+        </div>
         <div v-for="(reservation,n) in reservations">
           <div class="row">
-            <div class="col-2">{{reservation.dni}}</div>
-            <div class="col-2">{{reservation.room}}</div>
-            <div class="col-2">{{reservation.room}}</div>
+            <div class="col-3">{{reservation.dni}}</div>
+            <div class="col-3">{{reservation.room}}</div>
             <div class="col-3">{{reservation.checkin}}</div>
             <div class="col-3">{{reservation.checkout}}</div>
           </div>
@@ -21,13 +28,17 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="rut">Reserva</label>
-                <input type="text" class="form-control" id="booking" v-model="formReservation.bookingCode" :readonly="true" required />
+                <input type="text" class="form-control" id="booking" v-model="formReservation.bookingCode" :readonly="true"  />
               </div>
             </div>
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="rut">DNI</label>
-                <input type="text" class="form-control" id="dni" placeholder="12.345.678-9" v-model="formReservation.dni" required />
+                <select class="form-control" name="dni" id="dni" v-model="formReservation.dni" required :disabled="!this.clientsLoaded" >
+                  <option v-for="(item, index) in clients" v-bind:key="item.dni" :value="item.dni">{{ item.dni }} - {{ item.fullName }}</option>
+                </select>
+                <!--<input type="text" class="form-control" id="dni" placeholder="12.345.678-9" v-model="formReservation.dni" required />-->
+
               </div>
             </div>
           </div>
@@ -106,6 +117,8 @@ export default {
       rooms: [],
       roomsLoaded: false,
       reservedDays: [],
+      clients : [],
+      clientsLoaded: false,
       formReservation: {
         bookingCode: '',
         dni: '',
@@ -122,6 +135,7 @@ export default {
     }
     this.createBooking();
     this.readRoomsType();
+    this.loadClients();
   },
   methods: {
     persist(bookingCode) {
@@ -148,7 +162,7 @@ export default {
         "Simple",
         "Doble",
         "Triple",
-        "Duadruple",
+        "Cuadruple",
         "Matrimonial"
       ]
     },
@@ -227,7 +241,25 @@ export default {
           console.log("no se pudo agregar habitación");
           console.error(error);
         });
-    }
+    },
+    loadClients() {
+      this.clientsLoaded = false;
+      this.clients = [];
+      axios.get(`${process.env.VUE_APP_API_URL}/clients`)
+        .then(response => {
+          this.clientsLoaded = true;
+          console.log('clients loaded');
+          this.clients = response.data.map(client => {
+            return {
+              dni: client.dniNumber,
+              fullName: `${client.firstName} ${client.lastName}`
+            }
+          });
+        })
+        .catch(err => {
+          console.error(err);
+        })
+    },
   }
 };
 </script>
