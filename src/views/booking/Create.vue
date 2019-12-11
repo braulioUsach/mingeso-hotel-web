@@ -21,13 +21,13 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="rut">Reserva</label>
-                <input type="text" class="form-control" id="booking" v-model="formReservation.bookingCode" editable=false required />
+                <input type="text" class="form-control" id="booking" v-model="formReservation.bookingCode" :readonly="true" required />
               </div>
             </div>
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="rut">DNI</label>
-                <input type="text" class="form-control" id="dni" placeholder="YY-MM-DD" v-model="formReservation.dni" required />
+                <input type="text" class="form-control" id="dni" placeholder="12.345.678-9" v-model="formReservation.dni" required />
               </div>
             </div>
           </div>
@@ -60,18 +60,22 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="room">Habitación</label>
-                <select class="form-control" name="room" id="room" v-model="formReservation.room" required :disabled="!this.roomsLoaded">
+                <select class="form-control" name="room" id="room" v-model="formReservation.room" required :disabled="!this.roomsLoaded" @change="loadReservedDays()">
                   <option v-for="(item, index) in rooms" v-bind:key="index" :value="item.code">{{ item.code }}</option>
                 </select>
               </div>
             </div>
           </div>
-          <div class="row">
+          <div class="row mt-3">
             <div class="col-12">
-              <v-range-selector
-                :start-date.sync="formReservation.checkin"
-                :end-date.sync="formReservation.checkout"
-              />
+              <div class="form-group">
+                <label for="room">Periodo de reserva</label>
+                <v-range-selector
+                  :start-date.sync="formReservation.checkin"
+                  :end-date.sync="formReservation.checkout"
+                  :is-disabled="date => this.reservedaDays.includes(date)"
+                />
+              </div>
             </div>
           </div>
           <div class="row mt-4 float-right">
@@ -105,6 +109,7 @@ export default {
       roomsType: [],
       rooms: [],
       roomsLoaded: false,
+      reservedaDays: [],
       formReservation: {
         bookingCode: '',
         dni: '',
@@ -116,11 +121,6 @@ export default {
     };
   },
   mounted() {
-    if (localStorage.getItem('dni')) {
-      this.dni = localStorage.getItem('dni');
-      this.formReservation.dni = localStorage.getItem('dni');
-    }
-
     if (localStorage.getItem('firstName')) {
       this.firstName = localStorage.getItem('firstName');
     }
@@ -149,12 +149,17 @@ export default {
     },
     readRoomsType() {
       this.roomsType = [
-        "simple",
-        "doble",
+        "Simple",
+        "Doble",
+        "Triple",
+        "Duadruple",
+        "Matrimonial"
       ]
     },
     readRooms() {
       this.roomsLoaded = false;
+      this.formReservation.checkin = '';
+      this.formReservation.checkout = '';
       axios
         .post(`${process.env.VUE_APP_API_URL}/room/listByType`, {
           type: this.formReservation.roomType
@@ -175,9 +180,6 @@ export default {
     addReservation() {
       if (!this.formReservation) return;
       this.reservations.push(this.formReservation);
-      console.log({
-        formReservation: this.formReservation
-      });
       this.formReservation = {
         bookingCode: this.formReservation.bookingCode,
         dni: this.formReservation.dni,
@@ -191,6 +193,62 @@ export default {
     saveReservations() {
       let parsed = JSON.stringify(this.formReservation);
       localStorage.setItem('reservations', parsed);
+    },
+    loadReservedDays() {
+      this.reservedaDays = [];
+      const dummy = [{
+          "bookingcode": "RS190001",
+          "starDate": "2019-01-10T00:00:00.000+0000",
+          "endDate": "2019-05-12T00:00:00.000+0000",
+          "firstName": "Daniel",
+          "lastName": "Alvarez",
+          "codeRoom": "205",
+          "floor": 2
+        },
+        {
+          "bookingcode": "RS190001",
+          "starDate": "2019-05-13T00:00:00.000+0000",
+          "endDate": "2019-05-14T00:00:00.000+0000",
+          "firstName": "Daniel",
+          "lastName": "Alvarez",
+          "codeRoom": "205",
+          "floor": 2
+        },
+        {
+          "bookingcode": "RS190003",
+          "starDate": "2019-10-10T00:00:00.000+0000",
+          "endDate": "2019-10-12T00:00:00.000+0000",
+          "firstName": "Test",
+          "lastName": "Braulio",
+          "codeRoom": "205",
+          "floor": 2
+        },
+        {
+          "bookingcode": "RS190003",
+          "starDate": "2019-10-10T00:00:00.000+0000",
+          "endDate": "2019-10-13T00:00:00.000+0000",
+          "firstName": "Test",
+          "lastName": "Braulio",
+          "codeRoom": "209",
+          "floor": 2
+        },
+        {
+          "bookingcode": "RS190003",
+          "starDate": "2019-10-10T00:00:00.000+0000",
+          "endDate": "2019-10-15T00:00:00.000+0000",
+          "firstName": "Test",
+          "lastName": "Braulio",
+          "codeRoom": "207",
+          "floor": 2
+        }
+      ];
+      dummy.filter((reservation) => {
+        console.log(`${reservation.codeRoom} || ${this.formReservation.room}`);
+        if (reservation.codeRoom === this.formReservation.room) {
+          console.log(reservation.starDate.substring(0, 10));
+          this.reservedaDays.push(reservation.starDate.substring(0, 10));
+        }
+      })
     },
     onSubmit() {
       axios
