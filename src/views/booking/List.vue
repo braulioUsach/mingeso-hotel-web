@@ -45,7 +45,6 @@ import axios from "axios";
 import moment from "moment";
 import VDaySelector from 'vuelendar/components/vl-day-selector';
 import VRangeSelector from 'vuelendar/components/vl-range-selector';
-const dummy = require('./dummy.json');
 const daysToDisplay = 7
 export default {
   components: {
