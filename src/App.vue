@@ -6,6 +6,8 @@
       <router-link to="/clients/create">Crear Cliente</router-link>
       <span> | </span>
       <router-link to="/booking/create">Crear Reserva</router-link>
+      <span> | </span>
+      <router-link to="/checking/create">Check In</router-link>
     </div>
     <router-view />
   </div>
