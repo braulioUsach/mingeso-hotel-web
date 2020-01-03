@@ -21,6 +21,11 @@ export default new Router({
       path: "/booking/create",
       name: "create-booking",
       component: () => import("./views/booking/Create.vue")
+    },
+    {
+      path: "/checkin/create",
+      name: "create-checkin",
+      component: () => import("./views/checkin/Create.vue")
     }
   ]
 });
