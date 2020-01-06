@@ -7,7 +7,7 @@
       <span> | </span>
       <router-link to="/booking/create">Crear Reserva</router-link>
       <span> | </span>
-      <router-link to="/checking/create">Check In</router-link>
+      <router-link to="/checkin/create">Check In</router-link>
     </div>
     <router-view />
   </div>
