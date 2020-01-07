@@ -26,6 +26,16 @@ export default new Router({
       path: "/checkin/create",
       name: "create-checkin",
       component: () => import("./views/checkin/Create.vue")
+    },
+    {
+      path: "/services/new",
+      name: "add-service",
+      component: () => import("./views/services/New.vue")
+    },
+    {
+      path: "/checkout/create",
+      name: "create-checkout",
+      component: () => import("./views/checkout/Create.vue")
     }
   ]
 });

@@ -8,6 +8,10 @@
       <router-link to="/booking/create">Crear Reserva</router-link>
       <span> | </span>
       <router-link to="/checkin/create">Check In</router-link>
+      <span> | </span>
+      <router-link to="/services/New">Servicios</router-link>
+      <span> | </span>
+      <router-link to="/checkout/Create">Check Out</router-link>
     </div>
     <router-view />
   </div>
