@@ -75,7 +75,7 @@ export default {
         .then(response => {
           this.services = response.data.map((service) => {
             return {
-              id: service.id_service,
+              id: service.id,
               label: service.name
             }
           });
