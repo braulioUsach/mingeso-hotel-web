@@ -17,8 +17,14 @@
           <div class="row">
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
-                <label for="name">Nombre Completo</label>
-                <input type="text" class="form-control" id="name" placeholder="Juan Pérez" v-model="formCheckin.name" required />
+                <label for="firstName">Nombre</label>
+                <input type="text" class="form-control" id="firstName" placeholder="Juan" v-model="formCheckin.firstName" required />
+              </div>
+            </div>
+            <div class="col-xs-12 col-md-6">
+              <div class="form-group">
+                <label for="lastName">Apellido</label>
+                <input type="text" class="form-control" id="lastName" placeholder="Pérez" v-model="formCheckin.lastName" required />
               </div>
             </div>
             <div class="col-xs-12 col-md-6">
@@ -66,7 +72,8 @@ export default {
       dnisType: [],
       formCheckin: {
         bookingCode: '',
-        name: '',
+        firstName: '',
+        lastName: '',
         dni: '',
         country: 0,
         dniType: ''
@@ -112,7 +119,8 @@ export default {
       this.formCheckin = {
         bookingCode: this.formCheckin.bookingCode,
         dni: this.formCheckin.dni,
-        name: this.formCheckin.name,
+        firstName: this.formCheckin.firstName,
+        lastName: this.formCheckin.lastName,
         country: this.formCheckin.country,
         dniType: this.dniType
       };
@@ -125,7 +133,8 @@ export default {
     onSubmit() {
       axios
         .post(`${process.env.VUE_APP_API_URL}/checkin/add`, {
-          name: this.formCheckin.name,
+          firstName: this.formCheckin.firstName,
+          lastName: this.formCheckin.lastName,
           dni: this.formCheckin.dni,
           dniType: this.formCheckin.dniType,
           code: this.formCheckin.bookingCode,
