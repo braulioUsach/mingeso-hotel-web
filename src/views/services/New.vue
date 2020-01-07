@@ -21,7 +21,6 @@
                   </select>
                 </div>
               </div>
-
               <div class="col-xs-12 col-md-6">
                 <div class="form-group">
                   <label for="name">Inicio</label>
@@ -138,7 +137,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log("No se asociar el servicio a la habitación");
+          console.log("No se puede asociar el servicio a la habitación");
           console.error(error);
         });
     },
