@@ -1,26 +1,6 @@
 <template>
-<div class="client">
+<div class="checkin">
   <div class="container">
-    <div class="row">
-      <div class="col-12">
-        <div v-if="reservations.length > 0">
-          <div class="row">
-            <div class="col-3">DNI</div>
-            <div class="col-3">Habitación</div>
-            <div class="col-3">Llegada</div>
-            <div class="col-3">Salida</div>
-          </div>
-        </div>
-        <div v-for="(reservation,n) in reservations">
-          <div class="row">
-            <div class="col-3">{{reservation.dni}}</div>
-            <div class="col-3">{{reservation.room}}</div>
-            <div class="col-3">{{reservation.checkin}}</div>
-            <div class="col-3">{{reservation.checkout}}</div>
-          </div>
-        </div>
-      </div>
-    </div>
     <div class="row">
       <div class="col-12">
         <form v-on:submit.prevent="onSubmit">
@@ -29,7 +9,7 @@
             <div class="col-xs-12 col-md-8">
               <div class="form-group">
                 <label for="rut">Reserva (Opcional)</label>
-                <input type="text" class="form-control" id="booking" v-model="formReservation.bookingCode"  />
+                <input type="text" class="form-control" id="booking" v-model="formCheckin.bookingCode"  />
               </div>
             </div>
             <div class="col-xs-12 col-md-2"></div>
@@ -37,29 +17,29 @@
           <div class="row">
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
-                <label for="rut">Nombre Completo</label>
-                <input type="text" class="form-control" id="name" placeholder="Juan Pérez" v-model="formReservation.dni" required />
+                <label for="name">Nombre Completo</label>
+                <input type="text" class="form-control" id="name" placeholder="Juan Pérez" v-model="formCheckin.name" required />
               </div>
             </div>
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
-                <label for="rut">DNI</label>
-                <input type="text" class="form-control" id="dni" placeholder="12.345.678-9" v-model="formReservation.dni" required />
+                <label for="dni">DNI</label>
+                <input type="text" class="form-control" id="dni" placeholder="12.345.678-9" v-model="formCheckin.dni" required />
               </div>
             </div>
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
-                <label for="roomType">Tipo Documento</label>
-                <select class="form-control" name="roomsType" id="roomsType" v-model="formReservation.roomType" required @change="readRooms()">
-                  <option v-for="(item, index) in roomsType" v-bind:key="index" :value="item">{{ item }}</option>
+                <label for="dniType">Tipo Documento</label>
+                <select class="form-control" name="dnisType" id="dnisType" v-model="formCheckin.dniType" required>
+                  <option v-for="(item, index) in dnisType" v-bind:key="index" :value="item">{{ item }}</option>
                 </select>
               </div>
             </div>
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
-                <label for="rut">Nacionalidad</label>
-                <select class="form-control" name="typedni" id="typedni" v-model="formReservation.dni" required  @change="readRooms()">
-                  <option v-for="(item, index) in clients" v-bind:key="item.dni" :value="item.dni">{{ item.dni }} - {{ item.fullName }}</option>
+                <label for="nationality">País de origen</label>
+                <select class="form-control" name="country" id="country" v-model="formCheckin.country" required>
+                  <option v-for="(item, index) in countries" v-bind:key="index" :value="item.label">{{ item.label }}</option>
                 </select>
               </div>
             </div>
@@ -79,168 +59,91 @@
 
 <script>
 import axios from "axios";
-import VDaySelector from 'vuelendar/components/vl-day-selector';
-import VRangeSelector from 'vuelendar/components/vl-range-selector';
 export default {
-  components: {
-    VDaySelector,
-    VRangeSelector
-  },
   data() {
     return {
-      bookingCode: '',
-      dni: '',
-      firstName: '',
-      reservations: [],
-      newReservation: '',
-      roomsType: [],
-      rooms: [],
-      roomsLoaded: false,
-      reservedDays: [],
-      clients : [],
-      clientsLoaded: false,
-      formReservation: {
+      countries: [],
+      dnisType: [],
+      formCheckin: {
         bookingCode: '',
+        name: '',
         dni: '',
-        checkin: '',
-        checkout: '',
-        roomType: '',
-        room: ''
+        country: 0,
+        dniType: ''
       }
     };
   },
   mounted() {
-    if (localStorage.getItem('firstName')) {
-      this.firstName = localStorage.getItem('firstName');
-    }
-    this.createBooking();
-    this.readRoomsType();
-    this.loadClients();
+    this.readDNISType();
+    this.getCountries();
   },
   methods: {
     persist(bookingCode) {
       localStorage.bookingCode = bookingCode;
     },
-    createBooking() {
+    getCountries() {
       axios
-        .get(`${process.env.VUE_APP_API_URL}/new_reservation`)
+        .get(`${process.env.VUE_APP_API_URL}/countries`)
         .then(response => {
-          const {
-            bookingCode
-          } = response.data;
-          this.persist(bookingCode);
-          this.formReservation.bookingCode = bookingCode;
-          this.bookingCode = bookingCode;
-        })
-        .catch(error => {
-          console.log("no se pudo crear reserva");
-          console.error(error);
-        });
-    },
-    readRoomsType() {
-      this.roomsType = [
-        "Simple",
-        "Doble",
-        "Triple",
-        "Cuadruple",
-        "Matrimonial"
-      ]
-    },
-    readRooms() {
-      this.roomsLoaded = false;
-      this.formReservation.checkin = '';
-      this.formReservation.checkout = '';
-      axios
-        .post(`${process.env.VUE_APP_API_URL}/room/listByType`, {
-          type: this.formReservation.roomType
-        })
-        .then(response => {
-          this.rooms = response.data.map((room) => {
+          this.countries = response.data.map((country) => {
             return {
-              code: room.code
+              id: country.id_country,
+              label: country.name
             }
           });
-          this.roomsLoaded = true;
         })
         .catch(error => {
-          console.log("no se pudo cargar las habitaciones");
-          console.error(error);
+          this.countries = [{
+            id: "Chile",
+            label: "Chile"
+          }];
         });
     },
-    addReservation() {
-      if (!this.formReservation) return;
-      this.reservations.push(this.formReservation);
-      this.formReservation = {
-        bookingCode: this.formReservation.bookingCode,
-        dni: this.formReservation.dni,
-        checkin: '',
-        checkout: '',
-        roomType: '',
-        room: ''
+    readDNISType() {
+      this.dnisType = [
+        "Rut",
+        "Pasaporte",
+        "Otro DNI"
+      ]
+    },
+    addCheckIn() {
+      if (!this.formCheckin) return;
+      this.checkin.push(this.formCheckin);
+      this.formCheckin = {
+        bookingCode: this.formCheckin.bookingCode,
+        dni: this.formCheckin.dni,
+        name: this.formCheckin.name,
+        country: this.formCheckin.country,
+        dniType: this.dniType
       };
-      this.saveReservations();
-      // {"type":"none","start":"2019-12-19","end":"2019-12-31","room":"108","code":"RS190045","dni":"28092637-K"}
+      this.saveCheckin();
     },
-    saveReservations() {
-      let parsed = JSON.stringify(this.formReservation);
-      localStorage.setItem('reservations', parsed);
-    },
-    loadReservedDays() {
-      this.reservedDays = [];
-      axios.get(`${process.env.VUE_APP_API_URL}/reservation_list`)
-        .then(response => {
-          response.data.filter((reservation) => {
-            if (reservation.codeRoom === this.formReservation.room) {
-              this.reservedDays.push(reservation.starDate.substring(0, 10));
-            }
-          })
-        })
-        .catch(err => {
-          console.error(err);
-        })
+    saveCheckin() {
+      let parsed = JSON.stringify(this.formCheckin);
+      localStorage.setItem('checkin', parsed);
     },
     onSubmit() {
       axios
-        .post(`${process.env.VUE_APP_API_URL}/period/add`, {
-          type: this.formReservation.roomType,
-          start: this.formReservation.checkin,
-          end: this.formReservation.checkout,
-          room: this.formReservation.room,
-          code: this.formReservation.bookingCode,
-          dni: this.formReservation.dni,
+        .post(`${process.env.VUE_APP_API_URL}/checkin/add`, {
+          name: this.formCheckin.name,
+          dni: this.formCheckin.dni,
+          dniType: this.formCheckin.dniType,
+          code: this.formCheckin.bookingCode,
+          country: this.formCheckin.country,
         })
         .then((response) => {
           this.persist();
           const isValidResponse = response.data
 
           if (isValidResponse) {
-            this.addReservation();
+            this.addCheckIn();
           }
         })
         .catch(error => {
-          console.log("no se pudo agregar habitación");
+          console.log("No se pudo realizar el Check-In");
           console.error(error);
         });
-    },
-    loadClients() {
-      this.clientsLoaded = false;
-      this.clients = [];
-      axios.get(`${process.env.VUE_APP_API_URL}/clients`)
-        .then(response => {
-          this.clientsLoaded = true;
-          console.log('clients loaded');
-          this.clients = response.data.map(client => {
-            return {
-              dni: client.dniNumber,
-              fullName: `${client.firstName} ${client.lastName}`
-            }
-          });
-        })
-        .catch(err => {
-          console.error(err);
-        })
     },
   }
 };
 </script>
-<style src="vuelendar/scss/vuelendar.scss" lang="scss" />
