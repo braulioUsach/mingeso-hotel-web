@@ -15,42 +15,67 @@
             <div class="col-xs-12 col-md-2"></div>
           </div>
           <div class="row">
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-2">
               <div class="form-group">
                 <label for="firstName">Nombre</label>
-                <input type="text" class="form-control" id="firstName" placeholder="Juan" v-model="formCheckin.firstName" required />
+                <input type="text" class="form-control" id="firstName" placeholder="Juan" v-model="firstName" />
               </div>
             </div>
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-2">
               <div class="form-group">
                 <label for="lastName">Apellido</label>
-                <input type="text" class="form-control" id="lastName" placeholder="Pérez" v-model="formCheckin.lastName" required />
+                <input type="text" class="form-control" id="lastName" placeholder="Pérez" v-model="lastName" />
               </div>
             </div>
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-2">
               <div class="form-group">
                 <label for="dni">DNI</label>
-                <input type="text" class="form-control" id="dni" placeholder="12.345.678-9" v-model="formCheckin.dni" required />
+                <input type="text" class="form-control" id="dni" placeholder="12.345.678-9" v-model="dni" />
               </div>
             </div>
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-2">
               <div class="form-group">
                 <label for="dniType">Tipo Documento</label>
-                <select class="form-control" name="dnisType" id="dnisType" v-model="formCheckin.dniType" required>
+                <select class="form-control" name="dnisType" id="dnisType" v-model="dniType">
                   <option v-for="(item, index) in dnisType" v-bind:key="index" :value="item">{{ item }}</option>
                 </select>
               </div>
             </div>
-            <div class="col-xs-12 col-md-6">
+            <div class="col-xs-12 col-md-2">
               <div class="form-group">
                 <label for="nationality">País de origen</label>
-                <select class="form-control" name="country" id="country" v-model="formCheckin.country" required>
+                <select class="form-control" name="country" id="country" v-model="country">
                   <option v-for="(item, index) in countries" v-bind:key="index" :value="item.label">{{ item.label }}</option>
                 </select>
+                
               </div>
             </div>
-            
+            <div class="col-xs-12 col-md-2">
+              <div class="form-group">
+                <button @click="Guardar()" class="btn btn-primary">New Item</button>
+              </div>
+            </div>
           </div>
+          <table class="table text-center">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>DNI</th>
+              <th>Tipo Documento</th>
+              <th>Pais</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="persona in arrayPersonas" :key="persona.id"> <!-- Recorremos nuestro array -->
+              <td v-text="persona.firstName"></td> <!--En la primera columna mostramos el nombre-->
+              <td v-text="persona.lastName"></td>
+              <td v-text="persona.dni"></td>
+              <td v-text="persona.dniType"></td>
+              <td v-text="persona.country"></td>
+            </tr>
+          </tbody>
+        </table>
           <div class="row mt-4 float-right">
             <div class="form-group">
               <button class="btn btn-primary">Crear Check-In</button>
@@ -68,6 +93,13 @@ import axios from "axios";
 export default {
   data() {
     return {
+      arrayPersonas:[],
+      firstName: '',
+      lastName: '',
+      dni: '',
+      country: '',
+      country_id: 0,
+      dniType: '',
       countries: [],
       dnisType: [],
       formCheckin: {
@@ -85,6 +117,16 @@ export default {
     this.getCountries();
   },
   methods: {
+    Guardar(){
+      var persona = {firstName: this.firstName, lastName: this.lastName,
+                     dni: this.dni, country: this.country, dniType: this.dniType}
+                     this.arrayPersonas.push(persona);
+      this.firstName = "";
+      this.lastName = "";
+      this.dni = "";
+      this.country = "";
+      this.dniType = "";
+    },
     persist(bookingCode) {
       localStorage.bookingCode = bookingCode;
     },
@@ -101,7 +143,7 @@ export default {
         })
         .catch(error => {
           this.countries = [{
-            id: "Chile",
+            id: "1",
             label: "Chile"
           }];
         });
@@ -133,12 +175,8 @@ export default {
     onSubmit() {
       axios
         .post(`${process.env.VUE_APP_API_URL}/checkin/add`, {
-          firstName: this.formCheckin.firstName,
-          lastName: this.formCheckin.lastName,
-          dni: this.formCheckin.dni,
-          dniType: this.formCheckin.dniType,
-          code: this.formCheckin.bookingCode,
-          country: this.formCheckin.country,
+          reservationCode: this.formCheckin.bookingCode,
+          users: arrayPersonas
         })
         .then((response) => {
           this.persist();
