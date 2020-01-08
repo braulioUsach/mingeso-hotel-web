@@ -14,8 +14,8 @@
                                 <div class="form-group">
                                     <label for="rut">Habitación</label>
                                     <select class="form-control" name="rooms" id="rooms" v-model="room">
-                                        <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{
-                                            item.code }}
+                                        <option v-for="(item, index) in rooms" v-bind:key="index" :value="item.idRoom">
+                                            {{item.code }}
                                         </option>
                                     </select>
                                 </div>
@@ -120,6 +120,8 @@
                 countries: [],
                 dnisType: [],
                 rooms: [],
+                room: '',
+                error: '',
                 formCheckin: {
                     bookingCode: ''
                 }
@@ -129,9 +131,14 @@
             this.readDNISType();
             this.getCountries();
             this.getRooms();
+            this.Guardar();
         },
         methods: {
             Guardar() {
+                if (this.firstName == '' || this.lastName == '' || this.dni == '') {
+                    return false;
+                }
+
                 var person = {
                     firstName: this.firstName, lastName: this.lastName,
                     countryId: this.country.id, dni: this.dni, type_dni_id: this.dniType.id,
@@ -193,9 +200,17 @@
                     });
             },
             onSubmit() {
+                if (this.room == '') {
+                    this.error = "Seleccione habitación";
+                    return false;
+                }
+                if (this.arrayPersonas.length == 0) {
+                    this.error = "Agregue Persona";
+                    return false;
+                }
                 axios
                     .post(`${process.env.VUE_APP_API_URL}/checkin`, {
-                        roomId: this.rooms.idRoom,
+                        roomId: this.room,
                         users: this.arrayPersonas
                     })
                     .then((response) => {
@@ -207,7 +222,6 @@
                     .catch(error => {
                         this.error = "No se pudo realizar el Check-in";
                         this.info = "";
-                        console.log("No se pudo realizar el Check-In");
                         console.error(error);
                     });
             },
