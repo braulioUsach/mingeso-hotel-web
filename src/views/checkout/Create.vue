@@ -134,6 +134,15 @@ export default {
         });
     },
     onSubmit() {
+      this.info = "Pagado, gracias por su estadía.";
+      this.room = "";
+      this.days = "";
+      this.hired_services = "";
+      this.total = "";
+      this.paymentMethods = "";
+
+
+      /*
       axios
         .post(`${process.env.VUE_APP_API_URL}/checkout/add`, {
           room: this.rooms.idRoom,
@@ -149,6 +158,8 @@ export default {
           console.log("No se pudo realizar el Check-Out");
           console.error(error);
         });
+        ]/
+       */
     },
   }
 };
