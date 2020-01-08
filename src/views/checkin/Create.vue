@@ -174,12 +174,18 @@
                         this.dnisType = [{
                             id: "1",
                             label: "Rut"
+                        },{
+                            id: "2",
+                            label: "Pasaporte"
+                        },{
+                            id: "3",
+                            label: "Otro DNI"
                         }];
                     });
             },
             onSubmit() {
                 axios
-                    .post(`${process.env.VUE_APP_API_URL}/checkin/add`, {
+                    .post(`${process.env.VUE_APP_API_URL}/checkin`, {
                         reservationCode: this.formCheckin.bookingCode,
                         users: this.arrayPersonas
                     })
