@@ -100,34 +100,14 @@ export default {
                 }];
             });
     },
-    addService() {
-      if (!this.formAddService) return;
-      this.service.push(this.formAddService);
-      this.formAddService = {
-        room: this.formAddService.room,
-        service: this.formAddService.service,
-        inicio: this.formAddService.inicio,
-        fin: this.formAddService.fin
-      };
-      this.saveService();
-    },
-    saveService() {
-      let parsed = JSON.stringify(this.formAddService);
-      localStorage.setItem('service', parsed);
-    },
     onSubmit() {
       axios
-        .post(`${process.env.VUE_APP_API_URL}/services/add`, {
-          room: this.rooms.idRoom,
-          service: this.services.id
+        .post(`${process.env.VUE_APP_API_URL}/room/service`, {
+          roomId: this.rooms.idRoom,
+          serviceId: this.services.id
         })
         .then((response) => {
-          this.persist();
-          const isValidResponse = response.data
-
-          if (isValidResponse) {
-            this.addService();
-          }
+          
         })
         .catch(error => {
           console.log("No se puede asociar el servicio a la habitación");
