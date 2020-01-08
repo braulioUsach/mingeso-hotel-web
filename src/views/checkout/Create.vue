@@ -96,15 +96,13 @@ export default {
     },
     CargarDatos(){
         axios
-          .post(`${process.env.VUE_APP_API_URL}/sebaaaaaaaaa`, {
-            id_room: this.rooms.id
-          })
+          .get(`${process.env.VUE_APP_API_URL}/checkout/${this.rooms.id}`)
           .then(response => {
-
+              this.days = response.data.totalDays;
+              this.hired_services = response.data.servicesList;
+              this.total = response.data.totalPrice;
           })
           .catch(error => {
-            console.log("no se pudo cargar los datos");
-            console.error(error);
           });
     },
     getRooms() {
