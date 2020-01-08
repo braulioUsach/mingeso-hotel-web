@@ -39,7 +39,24 @@ node {
         }
     }
 
-    stage('Deploy') {
-        echo 'Continue in next iteration with CD...'
-    }
+     stage('Deploy on Dev Server'){
+            def dockerRun = 'sudo docker run -it -d -p 80:80 --name mingeso-hotel-web brauliousach/mingeso-hotel-web'
+            def dockerRm = 'docker rm -f mingeso-hotel-web'
+            sshagent(['ssh-dev-server']) {
+
+                withCredentials([string(credentialsId: 'docker-paswd-daniel', variable: 'dockerHubPwd')]) {
+                    def login = "docker login -u fallshimajer -p ${dockerHubPwd}"
+
+                    sh "ssh -o StrictHostKeyChecking=no  usach@35.232.225.161 ${login}"
+                    sh "ssh -o StrictHostKeyChecking=no  usach@35.232.225.161 docker pull brauliousach/mingeso-hotel-web"
+                    try{
+                        sh "ssh -o StrictHostKeyChecking=no  usach@35.232.225.161 docker rm -f mingeso-hotel-web"
+                    } catch(err){
+                        echo "Failed: ${err}"
+                        echo "Error al eliminar el contenedor"
+                    }
+                    sh "ssh -o StrictHostKeyChecking=no  usach@35.232.225.161 ${dockerRun}"
+                }
+            }
+        }
 }
