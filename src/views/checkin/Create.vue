@@ -107,17 +107,11 @@
                 lastName: '',
                 dni: '',
                 country: '',
-                country_id: 0,
                 dniType: '',
                 countries: [],
                 dnisType: [],
                 formCheckin: {
-                    bookingCode: '',
-                    firstName: '',
-                    lastName: '',
-                    dni: '',
-                    country: 0,
-                    dniType: ''
+                    bookingCode: ''
                 }
             };
         },
@@ -129,7 +123,8 @@
             Guardar() {
                 var persona = {
                     firstName: this.firstName, lastName: this.lastName,
-                    dni: this.dni, country: this.country, dniType: this.dniType
+                    country_id: this.country.id, dni: this.dni, type_dni_id: this.dniType.id,
+                    country: this.country, dniType: this.dniType
                 }
                 this.arrayPersonas.push(persona);
                 this.firstName = "";
