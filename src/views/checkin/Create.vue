@@ -121,12 +121,12 @@
         },
         methods: {
             Guardar() {
-                var persona = {
+                var person = {
                     firstName: this.firstName, lastName: this.lastName,
                     country_id: this.country.id, dni: this.dni, type_dni_id: this.dniType.id,
                     country: this.country, dniType: this.dniType
                 }
-                this.arrayPersonas.push(persona);
+                this.arrayPersonas.push(person);
                 this.firstName = "";
                 this.lastName = "";
                 this.dni = "";
