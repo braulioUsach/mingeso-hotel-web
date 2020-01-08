@@ -12,7 +12,7 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="room">Habitación</label>
-                <select class="form-control" name="rooms" id="rooms" v-model="room" required>
+                <select class="form-control" name="rooms" id="rooms" v-model="room" @change="CargarDatos()" required>
                   <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{ item.code }}</option>
                 </select>
               </div>
@@ -89,6 +89,7 @@ export default {
   mounted() {
     this.getPaymentMethods();
     this.getRooms();
+    this.CargarDatos();
   },
   methods: {
     persist(bookingCode) {

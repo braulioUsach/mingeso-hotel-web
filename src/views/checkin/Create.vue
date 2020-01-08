@@ -129,6 +129,7 @@
             this.readDNISType();
             this.getCountries();
             this.getRooms();
+            this.Guardar();
         },
         methods: {
             Guardar() {
