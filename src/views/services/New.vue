@@ -107,7 +107,10 @@ export default {
           serviceId: this.services.id
         })
         .then((response) => {
-          
+          this.rooms = "";
+          this.services = "";
+          this.formAddService.inicio = "";
+          this.formAddService.fin = "";
         })
         .catch(error => {
           console.log("No se puede asociar el servicio a la habitación");
