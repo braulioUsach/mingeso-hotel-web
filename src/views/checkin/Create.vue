@@ -5,6 +5,10 @@
                 <div class="col-12">
                     <form v-on:submit.prevent="onSubmit">
                         <div class="row">
+                            <div class="col-xs-12 col-md-12">
+                                <b><label style="color: blue;" name="info" id="info" v-text="info"></label></b>
+                                <b><label style="color: red;" name="error" id="error" v-text="error"></label></b>
+                            </div>
                             <div class="col-xs-12 col-md-2"></div>
                             <div class="col-xs-12 col-md-8">
                                 <div class="form-group">
@@ -106,6 +110,7 @@
     export default {
         data() {
             return {
+                info: "",
                 arrayPersonas: [],
                 firstName: '',
                 lastName: '',
@@ -196,8 +201,12 @@
                     .then((response) => {
                         this.rooms = "";
                         this.arrayPersonas = "";
+                        this.error = "";
+                        this.info = "Se creó el check-in correctamente";
                     })
                     .catch(error => {
+                        this.error = "No se pudo realizar el Check-in";
+                        this.info = "";
                         console.log("No se pudo realizar el Check-In");
                         console.error(error);
                     });
