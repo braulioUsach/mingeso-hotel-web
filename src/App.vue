@@ -11,7 +11,7 @@
       <span> | </span>
       <router-link to="/services/New">Servicios</router-link>
       <span> | </span>
-      <router-link to="/checkout/Create">Check-Out</router-link>
+      <router-link to="/checkout/Create">Check-Out (2020)</router-link>
     </div>
     <router-view />
   </div>
