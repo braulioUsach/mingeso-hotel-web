@@ -8,9 +8,12 @@
                             <div class="col-xs-12 col-md-2"></div>
                             <div class="col-xs-12 col-md-8">
                                 <div class="form-group">
-                                    <label for="rut">Reserva (Opcional)</label>
-                                    <input type="text" class="form-control" id="booking"
-                                           v-model="formCheckin.bookingCode"/>
+                                    <label for="rut">Habitación</label>
+                                    <select class="form-control" name="rooms" id="rooms" v-model="room">
+                                        <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{
+                                            item.name }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                             <div class="col-xs-12 col-md-2"></div>
@@ -111,6 +114,7 @@
                 dniType: '',
                 countries: [],
                 dnisType: [],
+                rooms: [],
                 formCheckin: {
                     bookingCode: ''
                 }
@@ -119,6 +123,7 @@
         mounted() {
             this.readDNISType();
             this.getCountries();
+            this.getRooms();
         },
         methods: {
             Guardar() {
@@ -147,6 +152,19 @@
                         this.countries = [{
                             id: "1",
                             name: "Chile"
+                        }];
+                    });
+            },
+            getRooms() {
+                axios
+                    .get(`${process.env.VUE_APP_API_URL}/room/listAll`)
+                    .then(response => {
+                        this.rooms = response.data
+                    })
+                    .catch(error => {
+                        this.rooms = [{
+                            id: "1",
+                            name: "205"
                         }];
                     });
             },
