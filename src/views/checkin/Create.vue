@@ -60,7 +60,7 @@
                             </div>
                             <div class="col-xs-12 col-md-2">
                                 <div class="form-group">
-                                    <button @click="Guardar()" class="btn btn-primary">New Item</button>
+                                    <button @click="Guardar()" type="button" class="btn btn-primary">Añadir Persona</button>
                                 </div>
                             </div>
                         </div>
@@ -79,8 +79,8 @@
                                 <td v-text="persona.firstName"></td> 
                                 <td v-text="persona.lastName"></td>
                                 <td v-text="persona.dni"></td>
-                                <td v-text="persona.dniType.id"></td>
-                                <td v-text="persona.country.id"></td>
+                                <td v-text="persona.dniType.label"></td>
+                                <td v-text="persona.country.label"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -177,23 +177,6 @@
                         }];
                     });
             },
-            addCheckIn() {
-                if (!this.formCheckin) return;
-                this.checkin.push(this.formCheckin);
-                this.formCheckin = {
-                    bookingCode: this.formCheckin.bookingCode,
-                    dni: this.formCheckin.dni,
-                    firstName: this.formCheckin.firstName,
-                    lastName: this.formCheckin.lastName,
-                    country: this.formCheckin.country,
-                    dniType: this.dniType
-                };
-                this.saveCheckin();
-            },
-            saveCheckin() {
-                let parsed = JSON.stringify(this.formCheckin);
-                localStorage.setItem('checkin', parsed);
-            },
             onSubmit() {
                 axios
                     .post(`${process.env.VUE_APP_API_URL}/checkin/add`, {
@@ -201,12 +184,7 @@
                         users: this.arrayPersonas
                     })
                     .then((response) => {
-                        this.persist();
-                        const isValidResponse = response.data
-
-                        if (isValidResponse) {
-                            this.addCheckIn();
-                        }
+                        
                     })
                     .catch(error => {
                         console.log("No se pudo realizar el Check-In");
