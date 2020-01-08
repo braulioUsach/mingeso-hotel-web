@@ -129,7 +129,7 @@
             Guardar() {
                 var person = {
                     firstName: this.firstName, lastName: this.lastName,
-                    countryId: this.country.id, dni: this.dni, type_dni_id: this.dniType.id,
+                    country_id: this.country.id, dni: this.dni, type_dni_id: this.dniType.id,
                     country: this.country, dniType: this.dniType
                 }
                 this.arrayPersonas.push(person);
@@ -190,7 +190,7 @@
             onSubmit() {
                 axios
                     .post(`${process.env.VUE_APP_API_URL}/checkin`, {
-                        reservationCode: this.rooms.idRoom,
+                        room_id: this.rooms.idRoom,
                         users: this.arrayPersonas
                     })
                     .then((response) => {
