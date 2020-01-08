@@ -146,7 +146,7 @@
                     .catch(error => {
                         this.countries = [{
                             id: "1",
-                            label: "Chile"
+                            name: "Chile"
                         }];
                     });
             },
@@ -159,13 +159,13 @@
                     .catch((_) => {
                         this.dnisType = [{
                             id: "1",
-                            label: "Rut"
+                            name: "Rut"
                         }, {
                             id: "2",
-                            label: "Pasaporte"
+                            name: "Pasaporte"
                         }, {
                             id: "3",
-                            label: "Otro DNI"
+                            name: "Otro DNI"
                         }];
                     });
             },

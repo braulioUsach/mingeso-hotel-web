@@ -95,21 +95,6 @@ export default {
           }];
         });
     },
-    addCheckout() {
-      if (!this.formCheckout) return;
-      this.checkin.push(this.formCheckout);
-      this.formCheckin = {
-        room: this.formCheckout.room,
-        name: this.formCheckout.name,
-        days: this.formCheckout.days,
-        paymentMethod: this.formCheckout.paymentMethod
-      };
-      this.saveCheckout();
-    },
-    saveCheckout() {
-      let parsed = JSON.stringify(this.formCheckin);
-      localStorage.setItem('checkout', parsed);
-    },
     onSubmit() {
       axios
         .post(`${process.env.VUE_APP_API_URL}/checkout/add`, {
@@ -119,12 +104,7 @@ export default {
           paymentMethod: this.formCheckout.paymentMethod,
         })
         .then((response) => {
-          this.persist();
-          const isValidResponse = response.data
 
-          if (isValidResponse) {
-            this.addCheckout();
-          }
         })
         .catch(error => {
           console.log("No se pudo realizar el Check-Out");
