@@ -37,7 +37,7 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="payment-method">Forma de Pago</label>
-                <select class="form-control" name="payment-method" id="payment-method" v-model="paymentMethods" required>
+                <select class="form-control" name="payment-method" id="payment-method" v-model="paymentMethod" required>
                   <option v-for="(item, index) in paymentMethods" v-bind:key="index" :value="item">{{ item.name }}</option>
                 </select>
               </div>
