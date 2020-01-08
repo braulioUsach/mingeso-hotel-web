@@ -5,6 +5,10 @@
       <div class="col-12">
         <form v-on:submit.prevent="onSubmit">
           <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <b><label style="color: blue;" name="info" id="info" v-text="info"></label></b>
+                <b><label style="color: red;" name="error" id="error" v-text="error"></label></b>
+            </div>
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="room">Habitación</label>
@@ -51,6 +55,8 @@ import axios from "axios";
 export default {
   data() {
     return {
+      info: "",
+      error: "",
       services: [],
       rooms: [],
       formAddService: {
@@ -107,12 +113,16 @@ export default {
           serviceId: this.services.id
         })
         .then((response) => {
+          this.info  = "El servicio se asoció correctamente a la habitación";
+          this.error = "";
           this.rooms = "";
           this.services = "";
           this.formAddService.inicio = "";
           this.formAddService.fin = "";
         })
         .catch(error => {
+          this.info = "";
+          this.error = "No se puede asociar el servicio a la habitación";
           console.log("No se puede asociar el servicio a la habitación");
           console.error(error);
         });
