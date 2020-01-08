@@ -194,7 +194,8 @@
                         users: this.arrayPersonas
                     })
                     .then((response) => {
-
+                        this.rooms = "";
+                        this.arrayPersonas = "";
                     })
                     .catch(error => {
                         console.log("No se pudo realizar el Check-In");

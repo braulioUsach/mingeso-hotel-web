@@ -5,22 +5,12 @@
       <div class="col-12">
         <form v-on:submit.prevent="onSubmit">
           <div class="row">
-            <div class="col-xs-12 col-md-2"></div>
-            <div class="col-xs-12 col-md-8">
+            <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="room">Habitación</label>
                 <select class="form-control" name="rooms" id="rooms" v-model="room" required>
                   <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{ item.code }}</option>
                 </select>
-              </div>
-            </div>
-            <div class="col-xs-12 col-md-2"></div>
-          </div>
-          <div class="row">
-            <div class="col-xs-12 col-md-6">
-              <div class="form-group">
-                <label for="name">Nombre Completo</label>
-                <input type="text" class="form-control" id="name" v-model="formCheckout.name" :disabled="true" required />
               </div>
             </div>
             <div class="col-xs-12 col-md-6">
