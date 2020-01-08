@@ -190,7 +190,7 @@
             onSubmit() {
                 axios
                     .post(`${process.env.VUE_APP_API_URL}/checkin`, {
-                        reservationCode: this.formCheckin.bookingCode,
+                        reservationCode: this.rooms.idRoom,
                         users: this.arrayPersonas
                     })
                     .then((response) => {

@@ -8,8 +8,8 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="room">Habitación</label>
-                <select class="form-control" name="room" id="room" v-model="formAddService.room" >
-                  <option v-for="(item, index) in rooms" v-bind:key="index" :value="item.label">{{ item.label }}</option>
+                <select class="form-control" name="room" id="room" v-model="rooms" >
+                  <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{ item.code }}</option>
                 </select>
               </div>
             </div>
@@ -17,7 +17,7 @@
                 <div class="form-group">
                   <label for="service">Servicio</label>
                   <select class="form-control" name="service" id="service" v-model="formAddService.service" required>
-                    <option v-for="(item, index) in services" v-bind:key="index" :value="item.label">{{ item.label }}</option>
+                    <option v-for="(item, index) in services" v-bind:key="index" :value="item">{{ item.label }}</option>
                   </select>
                 </div>
               </div>
@@ -89,20 +89,15 @@ export default {
     },
     getRooms() {
       axios
-        .get(`${process.env.VUE_APP_API_URL}/rooms`)
+        .get(`${process.env.VUE_APP_API_URL}/room/listAll`)
         .then(response => {
-          this.rooms = response.data.map((room) => {
-            return {
-              id: room.id_room,
-              label: room.name
-            }
-          });
+            this.rooms = response.data
         })
         .catch(error => {
-          this.rooms = [{
-            id: "201",
-            label: "201"
-          }];
+            this.rooms = [{
+                idRoom: "1",
+                code: "205"
+            }];
         });
     },
     addService() {
@@ -123,10 +118,8 @@ export default {
     onSubmit() {
       axios
         .post(`${process.env.VUE_APP_API_URL}/services/add`, {
-          room: this.formAddService.room,
-          service: this.formAddService.service,
-          inicio: this.formAddService.inicio,
-          fin: this.formAddService.fin
+          room: this.rooms.idRoom,
+          service: this.services.id
         })
         .then((response) => {
           this.persist();
