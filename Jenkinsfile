@@ -40,7 +40,7 @@ node {
     }
 
      stage('Deploy on Dev Server'){
-            def dockerRun = 'sudo docker run -it -d -p 80:80 --name mingeso-hotel-web brauliousach/mingeso-hotel-web'
+            def dockerRun = 'docker run -it -d -p 80:80 --name mingeso-hotel-web brauliousach/mingeso-hotel-web'
             def dockerRm = 'docker rm -f mingeso-hotel-web'
             sshagent(['ssh-dev-server']) {
 
