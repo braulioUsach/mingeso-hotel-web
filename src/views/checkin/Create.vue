@@ -67,7 +67,7 @@
                             </div>
                             <div class="col-xs-12 col-md-2">
                                 <div class="form-group">
-                                    <button @click="Guardar()" type="button" class="btn btn-primary">Añadir Persona
+                                    <button @click="Guardar()" type="button" class="btn btn-primary" id="addPerson">Añadir Persona
                                     </button>
                                 </div>
                             </div>
@@ -94,7 +94,7 @@
                         </table>
                         <div class="row mt-4 float-right">
                             <div class="form-group">
-                                <button class="btn btn-primary">Crear Check-In</button>
+                                <button class="btn btn-primary" id="createCheck">Crear Check-In</button>
                             </div>
                         </div>
                     </form>
