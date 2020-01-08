@@ -5,6 +5,10 @@
       <div class="col-12">
         <form v-on:submit.prevent="onSubmit">
           <div class="row">
+            <div class="col-xs-12 col-md-12">
+                <b><label style="color: blue;" name="info" id="info" v-text="info"></label></b>
+                <b><label style="color: red;" name="error" id="error" v-text="error"></label></b>
+            </div>
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="room">Habitación</label>
@@ -68,6 +72,8 @@ import axios from "axios";
 export default {
   data() {
     return {
+      info: "",
+      error: "",
       rooms: [],
       total: "",
       paymentMethods: [],
@@ -134,9 +140,12 @@ export default {
           paymentMethod: this.paymentMethods.id,
         })
         .then((response) => {
-
+            this.error = "";
+            this.info = "Se guardó el registro correctamente";
         })
         .catch(error => {
+          this.info = "";
+          this.error = "No se pudo realizar el Check-out";
           console.log("No se pudo realizar el Check-Out");
           console.error(error);
         });
