@@ -20,7 +20,7 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="days">Noches Alojadas</label>
-                <input type="text" class="form-control" id="days" v-model="formCheckout.days" :disabled="true" />
+                <input type="text" class="form-control" id="days" v-model="days" :disabled="true" />
               </div>
             </div>
 
