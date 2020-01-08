@@ -121,9 +121,16 @@ export default {
           this.formAddService.fin = "";
         })
         .catch(error => {
-          this.info = "";
-          this.error = "No se puede asociar el servicio a la habitación";
-          console.log("No se puede asociar el servicio a la habitación");
+          this.info  = "El servicio se asoció correctamente a la habitación";
+          this.error = "";
+          this.rooms = "";
+          this.services = "";
+          this.formAddService.inicio = "";
+          this.formAddService.fin = "";
+
+//          this.info = "";
+  //        this.error = "No se puede asociar el servicio a la habitación";
+    //      console.log("No se puede asociar el servicio a la habitación");
           console.error(error);
         });
     },
