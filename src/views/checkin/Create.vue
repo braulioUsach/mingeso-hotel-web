@@ -35,7 +35,7 @@
                                     <label for="dnisType">Tipo Documento</label>
                                     <select class="form-control" name="dnisType" id="dnisType" v-model="dniType">
                                         <option v-for="(item, index) in dnisType" v-bind:key="index" :value="item">{{
-                                            item.name }}
+                                            item.label }}
                                         </option>
                                     </select>
                                 </div>
@@ -52,7 +52,7 @@
                                     <label for="nationality">País de origen</label>
                                     <select class="form-control" name="country" id="country" v-model="country">
                                         <option v-for="(item, index) in countries" v-bind:key="index"
-                                                :value="item.label">{{ item.label }}
+                                                :value="item">{{ item.label }}
                                         </option>
                                     </select>
 
@@ -75,12 +75,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="persona in arrayPersonas" :key="persona.id"> <!-- Recorremos nuestro array -->
-                                <td v-text="persona.firstName"></td> <!--En la primera columna mostramos el nombre-->
+                            <tr v-for="persona in arrayPersonas" :key="persona.id">
+                                <td v-text="persona.firstName"></td> 
                                 <td v-text="persona.lastName"></td>
                                 <td v-text="persona.dni"></td>
-                                <td v-text="persona.dniType.name"></td>
-                                <td v-text="persona.country"></td>
+                                <td v-text="persona.dniType.id"></td>
+                                <td v-text="persona.country.id"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -163,14 +163,18 @@
                 axios
                     .get(`${process.env.VUE_APP_API_URL}/type_dni`)
                     .then(response => {
-                        this.dnisType = response.data;
+                        this.dnisType = response.data.map((dnitype) => {
+                            return {
+                                id: dnitype.id_dni_type,
+                                label: dnitype.name
+                            }
+                        });
                     })
                     .catch((_) => {
-                        this.dnisType = [
-                            "Rut",
-                            "Pasaporte",
-                            "Otro DNI"
-                        ]
+                        this.dnisType = [{
+                            id: "1",
+                            label: "Rut"
+                        }];
                     });
             },
             addCheckIn() {
@@ -194,7 +198,7 @@
                 axios
                     .post(`${process.env.VUE_APP_API_URL}/checkin/add`, {
                         reservationCode: this.formCheckin.bookingCode,
-                        users: arrayPersonas
+                        users: this.arrayPersonas
                     })
                     .then((response) => {
                         this.persist();
