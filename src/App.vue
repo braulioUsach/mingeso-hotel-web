@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav" class="nav-bar mb-3">
-      <router-link to="/">Inicio 2020</router-link>
+      <router-link to="/">Inicio 2021</router-link>
       <span> | </span>
       <router-link to="/clients/create">Crear Cliente</router-link>
       <span> | </span>
