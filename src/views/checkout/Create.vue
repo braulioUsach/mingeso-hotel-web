@@ -13,7 +13,7 @@
               <div class="form-group">
                 <label for="room">Habitación</label>
                 <select class="form-control" name="rooms" id="rooms" v-model="room" @change="CargarDatos()" required>
-                  <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{ item.code }}</option>
+                  <option v-for="(item, index) in rooms" v-bind:key="index" :value="item.idRoom">{{ item.code }}</option>
                 </select>
               </div>
             </div>
@@ -39,13 +39,13 @@
               </tbody>
               <br/>
           </table>
-          
+
           <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="total">Monto Total</label>
                 <input type="text" class="form-control" id="total" v-model="total" :disabled="true" />
               </div>
-            </div>   
+            </div>
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="payment-method">Forma de Pago</label>
@@ -53,7 +53,7 @@
                   <option v-for="(item, index) in paymentMethods" v-bind:key="index" :value="item">{{ item.name }}</option>
                 </select>
               </div>
-            </div>     
+            </div>
           </div>
           <div class="row mt-4 float-right">
             <div class="form-group">
@@ -74,8 +74,10 @@ export default {
     return {
       info: "",
       error: "",
+      room: "",
       rooms: [],
       total: "",
+      paymentMethod: "",
       paymentMethods: [],
       hired_services: [],
       formCheckout: {
@@ -89,7 +91,6 @@ export default {
   mounted() {
     this.getPaymentMethods();
     this.getRooms();
-    this.CargarDatos();
   },
   methods: {
     persist(bookingCode) {
@@ -97,7 +98,7 @@ export default {
     },
     CargarDatos(){
         axios
-          .get(`${process.env.VUE_APP_API_URL}/checkout/${this.rooms.id}`)
+          .get(`${process.env.VUE_APP_API_URL}/checkout/${this.room}`)
           .then(response => {
               this.days = response.data.totalDays;
               this.hired_services = response.data.servicesList;
