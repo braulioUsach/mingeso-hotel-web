@@ -16,7 +16,7 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="days">Noches Alojadas</label>
-                <input type="text" class="form-control" id="days" v-model="formCheckout.days" :disabled="true" required />
+                <input type="text" class="form-control" id="days" v-model="formCheckout.days" :disabled="true" />
               </div>
             </div>
 
@@ -33,8 +33,15 @@
                   <td v-text="service.price"></td>
               </tr>
               </tbody>
+              <br/>
           </table>
-
+          
+          <div class="col-xs-12 col-md-6">
+              <div class="form-group">
+                <label for="total">Monto Total</label>
+                <input type="text" class="form-control" id="total" v-model="total" :disabled="true" />
+              </div>
+            </div>   
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="payment-method">Forma de Pago</label>
@@ -42,7 +49,7 @@
                   <option v-for="(item, index) in paymentMethods" v-bind:key="index" :value="item">{{ item.name }}</option>
                 </select>
               </div>
-            </div>            
+            </div>     
           </div>
           <div class="row mt-4 float-right">
             <div class="form-group">
@@ -62,6 +69,7 @@ export default {
   data() {
     return {
       rooms: [],
+      total: "",
       paymentMethods: [],
       hired_services: [],
       formCheckout: {
@@ -94,18 +102,18 @@ export default {
           });
     },
     getRooms() {
-                axios
-                    .get(`${process.env.VUE_APP_API_URL}/room/listAll`)
-                    .then(response => {
-                        this.rooms = response.data
-                    })
-                    .catch(error => {
-                        this.rooms = [{
-                            idRoom: "1",
-                            code: "205"
-                        }];
-                    });
-            },
+      axios
+          .get(`${process.env.VUE_APP_API_URL}/room/listAll`)
+          .then(response => {
+              this.rooms = response.data
+          })
+          .catch(error => {
+              this.rooms = [{
+                  idRoom: "1",
+                  code: "205"
+              }];
+          });
+  },
     getPaymentMethods() {
       axios
         .get(`${process.env.VUE_APP_API_URL}/payment_method`)
