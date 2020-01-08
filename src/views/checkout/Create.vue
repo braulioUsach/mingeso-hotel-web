@@ -30,9 +30,20 @@
               </div>
             </div>
 
-            <div class="col-xs-12 col-md-12">
-              Aquí va a ir los servicios contratados por la habitación
-            </div>
+            <table class="table text-center">
+              <thead>
+              <tr>
+                  <th>Servicio Contratado</th>
+                  <th>Valor</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="service in hired_services" :key="service.id">
+                  <td v-text="service.name"></td>
+                  <td v-text="service.price"></td>
+              </tr>
+              </tbody>
+          </table>
 
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
@@ -62,6 +73,7 @@ export default {
     return {
       rooms: [],
       paymentMethods: [],
+      hired_services: [],
       formCheckout: {
         room: '',
         name: '',
@@ -77,6 +89,19 @@ export default {
   methods: {
     persist(bookingCode) {
       localStorage.bookingCode = bookingCode;
+    },
+    CargarDatos(){
+        axios
+          .post(`${process.env.VUE_APP_API_URL}/sebaaaaaaaaa`, {
+            id_room: this.rooms.id
+          })
+          .then(response => {
+
+          })
+          .catch(error => {
+            console.log("no se pudo cargar los datos");
+            console.error(error);
+          });
     },
     getRooms() {
                 axios
