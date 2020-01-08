@@ -35,7 +35,7 @@
                                     <label for="dnisType">Tipo Documento</label>
                                     <select class="form-control" name="dnisType" id="dnisType" v-model="dniType">
                                         <option v-for="(item, index) in dnisType" v-bind:key="index" :value="item">{{
-                                            item.label }}
+                                            item.name }}
                                         </option>
                                     </select>
                                 </div>
@@ -52,7 +52,7 @@
                                     <label for="nationality">País de origen</label>
                                     <select class="form-control" name="country" id="country" v-model="country">
                                         <option v-for="(item, index) in countries" v-bind:key="index"
-                                                :value="item">{{ item.label }}
+                                                :value="item">{{ item.name }}
                                         </option>
                                     </select>
 
@@ -60,7 +60,8 @@
                             </div>
                             <div class="col-xs-12 col-md-2">
                                 <div class="form-group">
-                                    <button @click="Guardar()" type="button" class="btn btn-primary">Añadir Persona</button>
+                                    <button @click="Guardar()" type="button" class="btn btn-primary">Añadir Persona
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -76,11 +77,11 @@
                             </thead>
                             <tbody>
                             <tr v-for="persona in arrayPersonas" :key="persona.id">
-                                <td v-text="persona.firstName"></td> 
+                                <td v-text="persona.firstName"></td>
                                 <td v-text="persona.lastName"></td>
                                 <td v-text="persona.dni"></td>
-                                <td v-text="persona.dniType.label"></td>
-                                <td v-text="persona.country.label"></td>
+                                <td v-text="persona.dniType.name"></td>
+                                <td v-text="persona.country.name"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -140,12 +141,7 @@
                 axios
                     .get(`${process.env.VUE_APP_API_URL}/countries`)
                     .then(response => {
-                        this.countries = response.data.map((country) => {
-                            return {
-                                id: country.id_country,
-                                label: country.name
-                            }
-                        });
+                        this.countries = response.data
                     })
                     .catch(error => {
                         this.countries = [{
@@ -158,21 +154,16 @@
                 axios
                     .get(`${process.env.VUE_APP_API_URL}/type_dni`)
                     .then(response => {
-                        this.dnisType = response.data.map((dnitype) => {
-                            return {
-                                id: dnitype.id_dni_type,
-                                label: dnitype.name
-                            }
-                        });
+                        this.dnisType = response.data;
                     })
                     .catch((_) => {
                         this.dnisType = [{
                             id: "1",
                             label: "Rut"
-                        },{
+                        }, {
                             id: "2",
                             label: "Pasaporte"
-                        },{
+                        }, {
                             id: "3",
                             label: "Otro DNI"
                         }];
@@ -185,7 +176,7 @@
                         users: this.arrayPersonas
                     })
                     .then((response) => {
-                        
+
                     })
                     .catch(error => {
                         console.log("No se pudo realizar el Check-In");
