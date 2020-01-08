@@ -11,7 +11,7 @@
                                     <label for="rut">Habitación</label>
                                     <select class="form-control" name="rooms" id="rooms" v-model="room">
                                         <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{
-                                            item.name }}
+                                            item.code }}
                                         </option>
                                     </select>
                                 </div>
@@ -163,8 +163,8 @@
                     })
                     .catch(error => {
                         this.rooms = [{
-                            id: "1",
-                            name: "205"
+                            idRoom: "1",
+                            code: "205"
                         }];
                     });
             },
