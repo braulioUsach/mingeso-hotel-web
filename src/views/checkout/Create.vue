@@ -9,8 +9,8 @@
             <div class="col-xs-12 col-md-8">
               <div class="form-group">
                 <label for="room">Habitación</label>
-                <select class="form-control" name="room" id="room" v-model="formCheckout.room" required>
-                  <option v-for="(item, index) in countries" v-bind:key="index" :value="item.label">{{ item.label }}</option>
+                <select class="form-control" name="rooms" id="rooms" v-model="room" required>
+                  <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{ item.code }}</option>
                 </select>
               </div>
             </div>
@@ -37,8 +37,8 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="payment-method">Forma de Pago</label>
-                <select class="form-control" name="payment-method" id="payment-method" v-model="formCheckout.paymentMethod" required>
-                  <option v-for="(item, index) in paymentMethods" v-bind:key="index" :value="item">{{ item.label }}</option>
+                <select class="form-control" name="payment-method" id="payment-method" v-model="paymentMethods" required>
+                  <option v-for="(item, index) in paymentMethods" v-bind:key="index" :value="item">{{ item.name }}</option>
                 </select>
               </div>
             </div>            
@@ -77,31 +77,37 @@ export default {
     persist(bookingCode) {
       localStorage.bookingCode = bookingCode;
     },
+    getRooms() {
+                axios
+                    .get(`${process.env.VUE_APP_API_URL}/room/listAll`)
+                    .then(response => {
+                        this.rooms = response.data
+                    })
+                    .catch(error => {
+                        this.rooms = [{
+                            idRoom: "1",
+                            code: "205"
+                        }];
+                    });
+            },
     getPaymentMethods() {
       axios
-        .get(`${process.env.VUE_APP_API_URL}/paymentMethods`)
+        .get(`${process.env.VUE_APP_API_URL}/payment_method`)
         .then(response => {
-          this.paymentMethods = response.data.map((paymentMethod) => {
-            return {
-              id: paymentMethod.id_payment,
-              label: paymentMethod.name
-            }
-          });
+          
         })
         .catch(error => {
           this.paymentMethods = [{
-            id: "Efectivo",
-            label: "Efectivo"
+            id: "1",
+            name: "Efectivo"
           }];
         });
     },
     onSubmit() {
       axios
         .post(`${process.env.VUE_APP_API_URL}/checkout/add`, {
-          room: this.formCheckout.room,
-          name: this.formCheckout.name,
-          days: this.formCheckout.days,
-          paymentMethod: this.formCheckout.paymentMethod,
+          room: this.rooms.idRoom,
+          paymentMethod: this.paymentMethods.id,
         })
         .then((response) => {
 

@@ -8,7 +8,7 @@
             <div class="col-xs-12 col-md-6">
               <div class="form-group">
                 <label for="room">Habitación</label>
-                <select class="form-control" name="room" id="room" v-model="rooms" >
+                <select class="form-control" name="rooms" id="rooms" v-model="room" >
                   <option v-for="(item, index) in rooms" v-bind:key="index" :value="item">{{ item.code }}</option>
                 </select>
               </div>
@@ -88,17 +88,17 @@ export default {
         });
     },
     getRooms() {
-      axios
-        .get(`${process.env.VUE_APP_API_URL}/room/listAll`)
-        .then(response => {
-            this.rooms = response.data
-        })
-        .catch(error => {
-            this.rooms = [{
-                idRoom: "1",
-                code: "205"
-            }];
-        });
+        axios
+            .get(`${process.env.VUE_APP_API_URL}/room/listAll`)
+            .then(response => {
+                this.rooms = response.data
+            })
+            .catch(error => {
+                this.rooms = [{
+                    idRoom: "1",
+                    code: "205"
+                }];
+            });
     },
     addService() {
       if (!this.formAddService) return;
