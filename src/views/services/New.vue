@@ -36,11 +36,11 @@
                   <label for="dni">Término</label>
                   <input type="time" class="form-control" id="finServicio" placeholder="00:00" v-model="formAddService.fin" required />
                 </div>
-              </div>            
+              </div>
             </div>
             <div class="row mt-4 float-right">
               <div class="form-group">
-                <button class="btn btn-primary">Añadir Servicio</button>
+                <button class="btn btn-primary" id="addService">Añadir Servicio</button>
               </div>
             </div>
         </form>
