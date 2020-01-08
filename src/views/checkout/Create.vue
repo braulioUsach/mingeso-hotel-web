@@ -95,7 +95,7 @@ export default {
       axios
         .get(`${process.env.VUE_APP_API_URL}/payment_method`)
         .then(response => {
-          
+            this.paymentMethods = response.data
         })
         .catch(error => {
           this.paymentMethods = [{
